@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Partes do Código Concorrente</title>
+		<meta name="vs_defaultClientScript" content="JavaScript">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
+		<meta name="ProgId" content="VisualStudio.HTML">
+		<meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
+		<LINK href="Boleto.css" type="text/css" rel="stylesheet">
+	</head>
+	<body MS_POSITIONING="FlowLayout">
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-2170502-3']);
+            _gaq.push(['_setDomainName', 'boletoasp.com.br']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+</script>
+		<FONT face="Arial">Tente entender, o código do concorrente, alem de mais caro, 
+			perceba que está codificado de forma a dificultar qualquer alteração ou 
+			personalização.<br>
+		</FONT>
+		<pre>
+'=============== CONFIGURE OS DADOS ABAIXO ========================================
+'============== DADOS DO CEDENTE (EMISOR DO BOLETO) =================================
+x136= "Nome do Cedente" ' Nome do Cedente Titular da Conta
+x49= "11.111.111/0001-01" ' CNPJ Cedente
+'============== DADOS DA CONTA DO CEDENTE (EMISOR DO BOLETO) ==========================
+x64 = "003376" 'Numero da Conta
+dac_conta = "0" ' Digito da Conta 
+x83 = "0238" 'Numero da Agência
+x9 =   "870" '  CNPJ PV da Caixa  operação 870 para carteira SR (8)
+
+'============= DADOS DO BOLETO A SER GERADO =======================================
+x101 = "5,00" ' Valor do Boleto
+x33 = "12/07/2004" ' Data de Vencimento
+x274= "12/07/2004" ' Data do Documento
+x10 = "01"  'Código da Carteira (01, 8, 9, 80, 81, 82, 00)
+x81 = "1" ' Nosso numero
+
+'================ DADOS DO SACADO (CLIENTE QUEM PAGA O BOLETO) ======================
+x109 = 	"Nome do seu cliente - (Sacado)" ' Nome do seu cliente - (Sacado)
+x70 = 	"Endereço do seu cliente - (Sacado)" ' Endereço do seu cliente - (Sacado)
+x79 =	"Bairro" ' Bairro Sacado
+x74 = 	"CEP" ' CEP Sacado
+x67 = 	"Cidade" ' Cidade
+x28 = 	"UF" ' Estado
+
+</pre>
+		<BR>
+		<FONT face="Arial">Veja algumas funções abaixo, o concorrente tenta ocultar o 
+			"segredo da geração do boleto" utilizando uma codificação numérica sem 
+			tabulações, para dificultar a leitura e o entendimento do código.</FONT>
+		<br>
+		<pre>
+Function x32(x126, x13)
+Dim x51, x27, x122, x150, x151, cnum
+x126 = RTrim(LTrim(x126))
+For x150 = 1 To Len(x126)
+x151 = Mid(x126, x150, 1)
+If IsNumeric(x151) Then
+cnum = cnum &amp; x151
+End If
+Next
+x126 = cnum
+x122 = "0000000000000000000000000000": x51 = CInt(x51)
+If Len(x126) &lt; x13 Then 
+x51 = Abs(x13) - Abs(Len(x126)): x27 = Mid(x122, 1, x51) &amp; CStr(x126)
+x32 = x27
+ElseIf Len(x126) &gt; x13 Then
+x32 = Right(x126, x13)
+Else
+x32 = x126
+End If
+End Function
+
+Function x16(x15, x36, x94)
+Dim x87, x69, x45
+x45 = x36 + 1
+x87 = ""
+Do
+If IsNumeric(Mid(x15, (x45), 1)) Then
+x87 = x87 &amp; Mid(x15, (x45), 1)
+x45 = x45 + 1
+End If
+Loop While IsNumeric(Mid(x15, (x45), 1))
+For x69 = 1 To x87
+x94 = x94 &amp; (x91(53))
+Next
+x36 = x36 + 2
+x16 = x94
+End Function
+</pre>
+		<P align="center">
+			<br>
+			<A href="PartesBoleto.htm">Agora veja&nbsp;algumas partes do nosso código<BR>
+				<br>
+			</A>[ <A href="PartesBoleto.htm">Partes dos códigos</A>| <A href="FuncoesBoleto.asp">
+				Algumas&nbsp;Funções</A>&nbsp;|&nbsp;<A href="../DOC">Documentação</A> ]</P>
+		<P>&nbsp;</P>
+	</body>
+</html>

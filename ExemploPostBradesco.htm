@@ -1,0 +1,55 @@
+<html>
+<body>
+<!-- 
+ATENÇÂO: A má configuração, ou configuração parcial das informações abaixo pode gerar um erro no programa
+=======
+ASP: Verifique se a configuração do 'Session.LCID' (ASP) está devidamente configurado para gerar datas no formato dd/mm/yyyy
+Retire: "http://www.boletoasp.com.br" da linha abixo para gerar local 
+
+-->
+<form name=BOLETO method="post"action="BoletoExibe.asp" >
+
+        <input type=hidden name="Cedente" value="xxx yyy voce" >
+		<input type=hidden name="Banco" value="237" >
+		<input type=hidden name="Agencia" value="3232-8" >
+		<input type=hidden name="AgenciaDigito" value="8" >
+		<input type=hidden name="Conta" value="0008390-9" >
+		<input type=hidden name="Carteira" value="09" >
+		<input type=hidden name="Convenio" value="237" >
+		<input type=hidden name="Modalidade" value="00">
+		<input type=hidden name="Sacado" value="seu cliente" >
+		<input type=hidden name="SacadoDOC" value="37899" >
+		<input type=hidden name="Endereco1" value="13213">
+		<input type=hidden name="Endereco2" value="CENTRO" >
+		<input type=hidden name="Endereco3" value="12345-13" >
+		<input type=hidden name="NossoNumero" value="13022900020" >
+		<input type=hidden name="NumeroDocumento" value="37899" >
+		<input type=hidden name="DataDocumento" value="01/10/2009">
+		<input type=hidden name="DataVencimento" value="16/09/2010">
+		<input type=hidden name="Valor" value="136,01" >
+		<input type=hidden name="Desconto" value="0" >
+		<input type=hidden name="juros" value="0" >
+		<input type=hidden name="Instrucoes" value="Cobra Mora/Multa (Juros) de 0,20% ao dia" >
+		<input type=hidden name="avista" value="N">
+		<input type=hidden name="Demonstrativo" value="demonstrativo">
+		<input type=hidden name="ImagePath" value="imagens/">
+		<input type=submit name="RUN" value="Gerar Boleto">
+	
+	<!-- Botão para submissão dos dados a página BoletoExibe.asp que com os parametros acima gera o boleto (não é necessário, é apenas um botão para disparar o envio das variáveis por POST) -->
+	<input type=submit value="Testar" ID="Submit1" NAME="Submit1">
+	
+</form>
+
+<script>
+//o comando java script abaixo efetua uma auto-requisição:
+//comente ou exclua as linha abaixo caso não queira utilizar uma auto submissão
+onload=Start;
+
+function Start(){
+	
+	document.BOLETO.submit();
+}
+</script>
+
+</body>
+</html>

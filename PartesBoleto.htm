@@ -1,0 +1,234 @@
+<html>
+	<head>
+		<title>Código fonte parcial do Boleto ASP</title>
+		<LINK href="Boleto.css" type="text/css" rel="stylesheet"></head>
+	<body>
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-2170502-3']);
+            _gaq.push(['_setDomainName', 'boletoasp.com.br']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+</script>
+		</STYLE><FONT face="Verdana"><STRONG><EM>Abaixo em cinza, algumas pastes do nosso código 
+					ASP<BR>
+				</EM></STRONG><FONT size="2">Bem explicadas, comentadas, e de fácil leitura</FONT></FONT>&nbsp;.<BR>
+<PRE>
+' Copyright (C) 2004 - IMPACTRO Informática - Fábio Ferreira de Souza
+' Versão 2.5 - Atualização: 15/10/2006
+' Desenvolvimento inicial em C#.Net -> adaptado para ASP em 4/9/2004
+' Suporte para Linux Apache Sun ASP em 06/06/2006
+' Suporte: fabio@impactro.com.br
+' Vendas: http://www.boletoasp.com.br
+
+'========================
+' Bancos e Carteiras suportadas: (apenas cobrança sem registro)
+' Banco do Brasil 001-9 - Bárias Carteiras e Modalidades (Barra) - Revisado de acordo com ultimas alteraçòes em 06/02/2006
+' BESC            027-2 - Carteira 25
+' Banespa		  033-7 - Carteira padrão - Ultima alteração: 27/03/2006
+' Banrisul        041-8 - Carteira padrão
+' Caixa	Econica   104-0 - Carteira padrão
+' Nossa Caixa     151-1 - Carteira 9 - Modalidades: 01, 04, 09, 13, 16, 17, 18
+' Bradesco        237-2 - Carteira padrão
+' ITAU            341-7 - Carteira 175
+' Sudameris		  347-6 - Carteira padrão
+' Santander	      353-0 - Carteira 102
+' Real            356-5 - Carteira padrão
+' Banco Mercantil 389-1 - Carteira padrão
+' HSBC            399-9 - Carteira 01, 02 - Modalidades: 4 e 5 (Carteira 02 é com registro)
+' UNIBANCO        409-0 - Carteira padrão
+'========================
+
+' Força mudança de layout para formato brasileiro
+' Caso seu sistema utilize outro formato LCID, reveja os tratamentos númericos e datas.
+' Alguns servidores APACHE (Linux) que dão suporte a ASP nem sempre aceitam configurações LCID
+'Session.LCID = 1046 
+DebugResponse( "Session.LCID: " & Session.LCID )
+
+'== Declaração e descrição das váriáveis
+
+'== INFORMAÇÕES SOBRE O CEDENTE ==
+Dim Banco			'Nº do Banco
+Dim BancoDig		'Nº da Dígito do Banco 
+Dim Agencia			'Nº da Agencia
+Dim AgenciaDIG		'Nº da Dígito da Agencia
+Dim Conta			'Nº da Conta
+Dim ContaDIG		'Nº do Dígito da Conta
+Dim Convenio		'Nº do convenio firmado com o banco do Brasil(Carteiras 171,172)
+Dim CodCedente		'Nº do código do Sedente (HSBC) / Código do cliente (Unibanco)
+Dim Carteira		'Nº da carteira 
+Dim Modalidade		'código da Modalidade (Tipo/Barra de formação do código de Barras) 
+Dim Cedente			'Nome da empresa cedente emissora do boleto
+
+'== INFORMAÇÔES DO SACADO ==
+Dim Sacado			'Nome ou Razão social do sacado
+Dim SacadoDoc		'Documento de identificação do sacado (CPF/CNPJ/RG)
+Dim Endereco1		'Linha 1 do endereço (ex: Rua XXXX, Numero - Complemento)
+Dim Endereco2		'Linha 2 do endereço (ex: Bairro - Cidade)
+Dim Endereco3		'Linha 3 do Endereço (ex: CEP:12345-678 - UF)
+
+'== INFORMAÇÔES DO BOLETO ==
+Dim DataDocumento	'Data de emissão do documento
+Dim DataVencimento	'Data de vencimento do documento
+Dim NossoNumero		'Nosso Número
+Dim NumeroDocumento	'Numero do documento
+Dim Quantidade		'Valor do campo quantidade
+Dim Valor			'Valor do documento
+Dim Instrucoes		'Instruções para o caixa
+Dim Demonstrativo	'Demonstrativo do conteudo do boleto
+Dim ImagePath		'Caminho relativo onde estão as imagens
+Dim Especial        'Variável logica para indicar quando a rotina Modulo 11 deve ser usada em logica especial
+
+'Por padrão e compatibilidade, a logica default, e a normal (não especial)
+Especial=false      'ao trocar para Especial (true) apos chamar a rotina de Modulo11 voltar para false
+
+'== Inicializa variáveis
+'Recomendamos que os dados sejam passados por meio de um POST
+'veja o arquivo GeraBoleto.ASP que obtem as informaçãoes de um banco dedos
+'e gera um formulário para ser postado
+
+Cedente=Request("Cedente")
+
+Banco=Request("Banco")
+BancoDig=Mid( Banco, 5)
+Banco=Mid(Banco,1,3)
+
+Agencia=Request("Agencia")
+Conta=Request("Conta")
+
+Carteira=Request("Carteira")
+Convenio=Request("Convenio")
+CodCedente=Request("CodCedente")
+Modalidade=Request("Modalidade")
+
+Sacado=Request("Sacado")
+SacadoDOC=Request("SacadoDOC")
+Endereco1=Request("Endereco1")
+Endereco2=Request("Endereco2")
+Endereco3=Request("Endereco3")
+
+NossoNumero=Request("NossoNumero")
+NumeroDocumento=Request("NumeroDocumento")
+
+'Em servidores APACHE ou IIS que não se pode configurar o LCID, as linhas abaixo de requisição
+'e depois de exibição, aparte HTML poderão dar problemas, veja com seu provedor de hospedagem
+'As funções GetDataVar() e FormatData() foram criadas para resolver esse problema.
+
+if Request("DataDocumento")="" then
+	DataDocumento=Now()
+else
+	DataDocumento=GetDataVar( "DataDocumento" )
+end if
+
+if Request("DataVencimento")="" then
+	DataVencimento=DateValue( "2001/01/01" ) 'Sem data de vencimento
+else
+	DataVencimento=GetDataVar( "DataVencimento" )
+end if
+
+'Tem que ser formato brasileiro (força) para garantir compatibilidade sem o LCID e em Linux Apache
+Valor=Request("Valor")
+Instrucoes=Request("Instrucoes")
+Demonstrativo=Request("Demonstrativo")
+
+ImagePath=Request("ImagePath")
+if ImagePath="" then
+	ImagePath="Imagens/"
+end if
+
+'== INFORMAÇÔES CALCULADAS ==
+Dim LinhaDigitavel
+Dim CodBarras
+
+'== Inicializa o calculo das informações
+
+CalculaCodigoBarras()
+CalculaLinhaDigitavel()
+
+</pre>
+		<BR>
+		<FONT face="Arial">Perceba que a códificação está toda comentada e bem explicada.<BR>
+			As variáveis e funções possuem nomes sugestivos, tornando o código facilmente 
+			entendivel.<BR>
+		</FONT>
+		<br>
+		<pre>
+'	04. LEIAUTE DO CÓDIGO DE BARRAS PADRÃO
+'...............................................................    
+'   N.    POSIÇÕES     PICTURE     USAGE        CONTEÚO                
+'...............................................................    
+'    01    001 a 003    9/003/      Display      001
+'    02    004 a 004    9/001/      Display      9 /Real/
+'(a) 03    005 a 005    9/001/      Display      DV /*/
+'(b) 04    006 a 009    9/004/      Display      fator de vencimento
+'    05    010 a 019    9/008/v99   Display      Valor
+'    06    020 a 044    9/025/      Display      CAMPO LIVRE
+'...............................................................    
+'OBS: 1 - o digito verificador da 5 (quinta) posição é calculado     
+'         com base no módulo 11 específico previsto no item 12;         
+'OBS: 2 - o fator de vencimento é calculado com base na metodologia 
+'         descrita no item 05.                                          
+
+	cBanco=Right( "000" &amp; Banco, 3 )
+	cCalcFat=Right( "00" &amp; CalcFatVencimento(), 4 )
+	cValor=Right( "0000000000" &amp; Int( Valor * 100 ), 10 )
+	cCodePadrao=cBanco &amp; "9" &amp; cCalcFat &amp; cValor	
+
+'O Modo de geração do Boleto bancário é padrão para qualquer banco.
+'O Campo Livre muda de de banco para banco e de acordo com a carteira e convenios contratados
+'Esta área pode e deve ser alterada conforme a necessidade
+'Existem alguns Response.Write() comendados para auxiliar uma possível depuração
+'Sugiro que realise testes imprimindo alguns boletos e entregando a seu gerente
+'para que possa ser validado o boleto e testado pagando pequenos valores emitidos pelo 
+'boleto gerado antes de colocar em produção
+
+'"cLivre" deve ser gerada de acordo com o banco para que o boleto continue a ser gerado
+'deve ser obrigatoriamente uma string com 25 posições numericas
+
+	SELECT CASE Banco
+		CASE "001"	' Banco do Basil
+			'Response.Write("BB: " &amp; Carteira )
+			
+			AgenciaDig=Mid(Agencia,6)
+			Agencia=Mid(Agencia,1,4)
+			
+			ContaDig=Mid( Conta, 9)
+			Conta=Mid(Conta,1,7)
+</pre>
+		<BR>
+		<FONT face="Arial">O HTML gerado possue algumas definições simples de estilo e 
+			variáveis ASP mescladas junto ao HTML</FONT>
+		<pre>			cLivre=Right( "000000" &amp; Convenio,6) &amp; _
+				Right("00000000000000000" &amp; cNossoNumero,17) &amp; _
+				"21"
+</pre>
+		<pre>&lt;style&gt;<BR> BODY { FONT-SIZE: 10pt; FONT-FAMILY: Arial; BACKGROUND-COLOR: #ffffff	}<BR> TABLE { BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid }<BR> TD { BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 7pt; FONT-FAMILY: Arial }<BR><BR> .noborder { BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px }<BR> .campo { FONT-WEIGHT: bold; FONT-SIZE: 8pt; MARGIN-LEFT: 2px; MARGIN-RIGHT: 2px; FONT-FAMILY: Verdana }<BR>&lt;/style&gt;<BR><BR><BR>&lt;STRONG&gt;Instruções:&lt;/STRONG&gt;&lt;BR&gt;</pre>
+		<P>
+			<A href="PartesBoletoNet.htm">Veja como fica a codificação de um exemplo usando o 
+				componente para ASP.Net </A>
+			<BR>
+			<A href="PostGratis.htm">Você pode implementar um post gratuitamente&nbsp;para 
+				testar nosso Gerador de Boletos </A>
+			<br>
+			<A href="FuncoesBoleto.asp">Teste algumas funções ASP do boleto (Cálculo do Código 
+				de Barras, Módulos 10 e 11 )</A>
+			<br>
+			<A href="PartesConcorrente.htm">Compare, nosso código com o código do concorrente</A>
+			<BR>
+			<BR>
+			<hr size="2" color="red">
+		<p align="center">
+			<A href="http://www.boletoasp.com.br/">Faça seu pedido, 
+				Clique aqui para comprar</A><BR>
+			Suporte ou dúvidas: <A href="mailto:fabio@impactro.com.br">fabio@impactro.com.br</A></p>
+		<P align="center">[ <A href="PartesBoleto.htm">Partes dos códigos</A>|&nbsp; <A href="FuncoesBoleto.asp">
+				Algumas&nbsp;Funções</A>&nbsp;| &nbsp;<A href="../DOC">Documentação</A> ]</P>
+	</body>
+</html>

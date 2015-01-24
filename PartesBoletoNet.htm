@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>Partes do código do Boleto (Componente DLL C#.Net)</title><LINK href="Boleto.css" type="text/css" rel="stylesheet">
+	</head>
+	<body>
+        <script type="text/javascript">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-2170502-3']);
+            _gaq.push(['_setDomainName', 'boletoasp.com.br']);
+            _gaq.push(['_trackPageview']);
+
+            (function () {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+</script>
+		<P>
+			<FONT face="Arial" size="2"><FONT color="#660000"><FONT color="#0000ff">Parte do código em 
+						ASP.Net (VB.Net)<BR>
+					</FONT></FONT></FONT>
+		</P>
+		<P><FONT face="Arial" size="2"><FONT color="#660000"><FONT color="#0000ff">&lt;</FONT>cc1:Boleto</FONT>
+				<FONT color="#ff0000">id=<FONT color="#0000ff">"bltPag"</FONT> runat=<FONT color="#0000ff">"server"&gt;<FONT face="Arial" size="2"><FONT color="#660000"><FONT color="#0000ff">&lt;</FONT>/cc1:Boleto&gt;</FONT></FONT></FONT></FONT>
+			</FONT>
+		</P>
+		<P><FONT face="Verdana" size="2"><FONT color="#0000ff">Private Sub</FONT> Page_Load(<FONT color="#0000ff">ByVal</FONT>
+				sender <FONT color="#0000ff">As</FONT> System.Object, <FONT color="#0000ff">ByVal</FONT>
+				e As System.EventArgs) <FONT color="#0000ff">Handles</FONT> <FONT color="#0000ff">MyBase</FONT>
+				.Load&nbsp;
+				<br>
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; 'monta o boleto diretamente definindo os 
+					campos</FONT> &nbsp;
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.Banco = "341-7"&nbsp;
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.Agencia = "0452"&nbsp;
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.Conta = "65470-0"&nbsp;
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.Carteira = "175"&nbsp;
+				<br>
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.NossoNumero = 
+				213456&nbsp;
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.DataVencimento = 
+				Now.AddDays(15)&nbsp;
+				<br>
+				<br>
+				<FONT color="#006633">&nbsp;&nbsp;&nbsp; </FONT>bltPag.Sacado = "seu nome"<BR>
+			</FONT><FONT face="Verdana" size="2">
+				<br>
+				<FONT color="#0000ff">End Sub</FONT></FONT>
+		</P>
+		<P>
+			<A href="PartesBoleto.htm">Conheça também&nbsp;nosso código 100% ASP convencional, 
+				sem nenhum componente ActiveX ou DLL</A>
+		</P>
+		<P>
+			<HR color="red" SIZE="2">
+		<P></P>
+		<P align="center"><A href="http://www.boletoasp.com.br/">Faça 
+				seu pedido, Clique aqui para comprar</A><BR>
+			Suporte ou dúvidas: <A href="mailto:fabio@impactro.com.br">fabio@impactro.com.br</A></P>
+		<P align="center">[ <A href="PartesBoleto.htm">Partes dos códigos</A>|&nbsp; <A href="FuncoesBoleto.asp">
+				Algumas&nbsp;Funções</A>&nbsp;| &nbsp;<A href="../DOC">Documentação</A> ]</P>
+	</body>
+</html>

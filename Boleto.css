@@ -1,0 +1,17 @@
+body
+{
+	font-size: 9pt;
+	font-family: Arial;
+	background-color: #ffffcc;
+}
+table
+{
+	font-size: 9pt;
+	font-family: Arial;
+	background-color: #ffffff;
+}
+th { font-weight: bold; font-size: 10pt; color: #ffffff; font-family: Verdana; background-color: #003366; }
+pre { background-color: #cccccc; }
+
+.TableFormat
+{style="BORDER-RIGHT: #0000cc thin solid; BORDER-TOP: #0000cc thin solid; BORDER-LEFT: #0000cc thin solid; BORDER-BOTTOM: #0000cc thin solid;}

@@ -1,0 +1,117 @@
+BOLETO ASP - GPL
+
+HISTÓRICO
+=========
+
+Este projeto teve inicio em Agosto de 2004, desenvolvido inicialmente em C#
+para geração de boletos para o Banco do Brasil e ITAU, foi adaptado para ASP
+em Setembro/2004 e desde então a cada mês novos cliente surgem pedindo novos 
+bancos e carteiras, assim como sugerindo alterações e dando novas ideias, assim
+nosso código permanece atualizado, sempre, e compatível com os bancos e carteiras
+suportadas, sendo constantemente homologados por diversos bancos.
+
+No inicio este gerador de boleto foi desenvolvido especificamente apenas para
+programadores ASP que tinha bastante experiência e familiaridade com ASP, mas o número
+de clientes que não tem noção de programação, precisava deste produto também 
+implementado em seu site, por causa disto criamos um serviço chamado de "instalação" 
+para clientes que possuíam sites que já tinham algum controle de cobrança, e-commerce,
+ou formulário de pedidos, mas só isso não era o suficiente, então a cada nova instalação
+fomos criando alguns arquivos de exemplo tanto para programadores, como também um pequeno
+sistema de cobranças.
+
+Depois de muitos anos comercializando os componente em ASP e ASP.Net, a procura pela 
+versão ASP classica é quase zero, inviabilizando manter o projeto atualizado, por isso
+a partir de Março/2014 os fontes estão abertos e distribuidos gratuitamente no meu site
+como fonte de estudo ou produção, e assim não me responsabilizo mais pela continuidade
+do projeto abrindo com fontes como GPL
+http://pt.wikipedia.org/wiki/GNU_General_Public_License
+
+EXEMPLOS
+========
+
+Os arquivos de exemplo são:
+ + ExemploPostGratis.htm
+    Aqui está o POST padrão, corretamente formatado em HTML, para seja copiado/colado 
+    na rotina de disparo da conclusão de qualquer pedido/venda ou cobrança de algum 
+    sistema financeiro, basta substituir as variáveis pelos seus dados de cedente,
+    sacado e boleto
+
+ + GeraBoleto.asp
+    É o arquivo de exemplo mais útil, e usado em quase todos os casos de instalação
+    Baseia-se na leitura de dados de um banco de dados, via ADO convencional utilizando
+    um "SELECT * FROM tabela WHERE Cod=Requisitado" para obter as informações do boleto 
+    a ser impresso.
+    Este programa pega separadamente configurações de uma tabela e dados de outra, 
+    possibilitando logicas de emissão diferentes por banco.
+    Também este programa é utilizado para obter informações baseado em um 
+    "mini sistema de cobranças" que será descrito mais abaixo
+
+ + GeraBoleto2.asp
+    Este programa é muito simples, e parecido com o ExemploPostGratis.htm mas a diferença
+    é que os dados do boleto e sacado vem de uma requisição <%Variavel=REQUEST("variavel")%>
+    ou seja, com isso pode se gerar links complexos com todas as variáveis a ser enviadas.
+
+ + GeraBoleto3.asp
+    Este exemplo é praticamente igual ao GeraBoleto2.asp, mas a única diferença é que ao
+    ser executado ele dispara um e-mail para alguém informando que o boleto foi acessado
+
+ + Formulario.asp
+    É a página mais conhecida, é a página de teste genérico de informações, onde qualquer
+    pessoa pode preencher qualquer informações e gerar um boleto correspondente.
+
+ + FuncoesBoleto.asp
+    Caso você queira entender mais como funciona a logica interna ou precise gerar apenas
+    código de barras, neste arquivo estão separadas as principais rotinas do gerador de 
+    boletos, é muito útil para testes e suporte.
+    
+    
+MINI SISTEMA DE COBRANÇAS
+=========================
+
+ + Cobranca.asp
+    Este é um pequeno aplicativo que CADASTRA apenas informações de um dado SACADO e de
+    um BOLETO relacionado a este.
+    Os dados ficam gravados em um arquivo MDB chamado "ProdCobranca.mdb", onde além das
+    cobranças registradas há também uma tabela de configurações que são os dados do CEDENTE
+    que será usado em todas as cobranças.
+    O Programa dispara um e-mail para o sacados disponibilizando um link para exibir o boleto
+    Este programa utiliza "GeraBoleto.asp" para obter as informações gravadas anteriormente
+    e que é obtido por meio de um link enviado para o e-mail do sacado.
+
+
+O GERADOR DE BOLETOS
+====================
+
+ + BoletoExibe.asp
+    Este é o ARQUIVO PRINCIPAL, ele que gera o boleto, e possui todos os cálculos, e layout
+    Cada banco e carteira estão neste arquivo programados, de forma logica e separada por banco
+    Existe uma área de funções e outra de HTML separada para que fique fácil de alterar o layout.
+    Mas não recomendamos nenhum cliente, alterar este arquivo pois em casos de atualizações, 
+    correções ou bugs, enviamos somente este arquivo atualizado.
+
+
+INSTALAÇÃO
+==========
+
+    O Arquivo BoletoASP.ZIP é exatamente o mesmo conteúdo publicado em exemplos.boletoasp.com.br/BoletoASP,
+    ou seja é o próprio site do mesmo jeito que está lá.
+    Para funcionar o servidor precisa rodar ASP, recomendamos Windows 2000/2003 Server, embora
+    o programa também funcione com outros sistemas como Windows XP Pro/2000 Pro.
+    Basta copiar os arquivos, para uma pasta do IIS que execute programas ASP e pronto.
+    Na Web coloque em alguma pasta de FTP que já deve funcionar.
+
+    É importante notar que os programas ASP, alteram o SESSION.LCID para o padrão Brasil,
+    para formatar as datas em um formato compatível.
+
+    Caso tenha alguma dúvida entre em contato.
+
+
+Obrigado!
+Boas Cobranças
+______________________________
+Fábio Ferreira de Souza
+IMPACTRO Informática
+Tel: 11 9 6607-2730
+e-mail: fabio@impactro.com.br
+Site Super Boleto: http://www.boletoasp.com.br
+Site Impactro: http://www.impactro.com.br
